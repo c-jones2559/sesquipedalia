@@ -1,17 +1,13 @@
 /* Selects all <h1> elements and makes them blue */
 h1 {
   color: darkblue;
+  text-align: center;
 }
 h2 {
     color: blue;
+    text-align: center;
 }
 
-/* Selects elements with class "important" and makes text bold */
-.important {
-  font-weight: bold;
-}
-
-/* Selects element with id "main" and adds padding */
-#main {
-  padding: 20px;
+body {
+    text-align: center;
 }
