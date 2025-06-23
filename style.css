@@ -1,0 +1,14 @@
+/* Selects all <h1> elements and makes them blue */
+h1 {
+  color: blue;
+}
+
+/* Selects elements with class "important" and makes text bold */
+.important {
+  font-weight: bold;
+}
+
+/* Selects element with id "main" and adds padding */
+#main {
+  padding: 20px;
+}
