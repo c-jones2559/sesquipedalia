@@ -45,6 +45,13 @@ function getWordOfTheDay() {
 // Display the bits
 const wordObj = getWordOfTheDay();
 
-document.getElementById("word").textContent = wordObj.word;
+document.getElementById("word").textContent = `Day ${dayOfYear}: ${wordObj.word}`;
 document.getElementById("definition").textContent = `Definition: ${wordObj.definition}`;
 document.getElementById("example").textContent = `Example: ${wordObj.example}`;
+
+// Register service worker for PWA
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('service-worker.js')
+    .then(() => console.log('Service Worker registered'))
+    .catch(err => console.error('Service Worker registration failed:', err));
+}
