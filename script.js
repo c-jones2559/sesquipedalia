@@ -45,6 +45,10 @@ function getWordOfTheDay() {
 // Display the bits
 const wordObj = getWordOfTheDay();
 
+const now = new Date();
+  const dayOfYear = Math.floor(
+    (now - new Date(now.getFullYear(), 0, 0)) / (1000 * 60 * 60 * 24)
+  );
 document.getElementById("word").textContent = `Day ${dayOfYear}: ${wordObj.word}`;
 document.getElementById("definition").textContent = `Definition: ${wordObj.definition}`;
 document.getElementById("example").textContent = `Example: ${wordObj.example}`;
