@@ -1,6 +1,9 @@
 /* Selects all <h1> elements and makes them blue */
 h1 {
-  color: blue;
+  color: darkblue;
+}
+h2 {
+    color: blue;
 }
 
 /* Selects elements with class "important" and makes text bold */
