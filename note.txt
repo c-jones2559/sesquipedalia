@@ -1,0 +1,1 @@
+padding is inside border, margin is outside
