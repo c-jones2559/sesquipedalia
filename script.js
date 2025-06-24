@@ -1,36 +1,42 @@
-// Your legendary list of obscure words
 const words = [
-    "defenestrate",
-    "ostracise",
-    "sonder",
-    "salubrious",
-    "snollygoster",
-    "absquatulate",
-    "sesquipedalian",
-    "exacerbate",
-];
+  'sanctiloquent',  'defenestrate',    'limerence',
+  'kakorrhaphiophobia', 'collywobbles',  'quomodocunquize',
+  'psithurism',     'blatherskite',    'scacchic',
+  'apricity',       'susurrus',        'mumpsimus',
+  'gobbledygook',   'philoprogenitive','clinomania',
+  'fudgel',         'absquatulate',    'yonderly',
+  'serendipity',    'abecedarian',     'wabbit',
+  'raconteur',      'infandous',       'squizzy',
+  'zettzwang',      'lamprophony',     'pauciloquent',
+  'tyrotoxism',     'autotomy',        'epicaricacy',
+  'nefelibata',     'xanthic',         'collywobbles',
+  'limerence',      'logorrhea',       'nudiustertian',
+  'callipygian',    'tittynope',       'recumbentibus',
+  'discombobulate', 'jentacular',      'zugzwang',
+  'hemidemisemiquaver', 'agelast',      'absquatulate',
+  'bibliopole',     'petrichor',       'kakorrhaphiophobia',
+  'sonder',         'velleity',        'infandous'
+]
 
-// Same logic: consistent word each day
 function getWordOfTheDay() {
-    const now = new Date();
-    const dayOfYear = Math.floor((now - new Date(now.getFullYear(), 0, 0)) / (1000 * 60 * 60 * 24));
-    const index = dayOfYear % words.length;
+    const index = getDaysSinceStartIndex() - 1 % words.length;
     return words[index];
 }
 
-// Display the bits
-const word = getWordOfTheDay();
 
-const now = new Date();
-const dayOfYear = Math.floor((now - new Date(now.getFullYear(), 0, 0)) / (1000 * 60 * 60 * 24));
-document.getElementById("word").textContent = `Day ${dayOfYear}: ${word}`;
-getWordData(word).then(data => {
-    document.getElementById("definition").textContent = `Definition: ${data.definition}`;
-    document.getElementById("example").textContent = `Example: ${data.example}`;
-    document.getElementById("pronunciation").textContent = `${data.pronunciation}`;
-}).catch(err => {
-    console.error("Error fetching word data:", err);
-});
+updateDay();
+
+function updateDay() {
+    const word = getWordOfTheDay();
+    document.getElementById("word").textContent = `Day ${getDaysSinceStartIndex()}: ${word}`;
+    getWordData(word).then(data => {
+        document.getElementById("definition").textContent = `Definition: ${data.definition}`;
+        document.getElementById("example").textContent = `Example: ${data.example}`;
+        document.getElementById("pronunciation").textContent = `${data.pronunciation}`;
+    }).catch(err => {
+        console.error("Error fetching word data:", err);
+    });
+}
 
 
 // Register service worker for PWA
@@ -72,4 +78,43 @@ async function getWordData(word) {
 
     console.log(`Fetched "${word}" from API and cached`);
     return wordData;
+}
+
+/*days are days since start of 2025*/
+/*retrieve start date from localStorage or set it to today if not found*/
+function getStartDate() {
+    const date = localStorage.getItem("startDate");
+    if (date) {
+        return date;
+    } else {
+        const now = localStorage.setItem("startDate", getCurrentDay());
+        return now;
+    }
+}
+
+function resetStartDate() {
+    const now = new Date();
+    const date = Math.floor((now - new Date(2025)) / (1000 * 60 * 60 * 24));
+    localStorage.setItem("startDate", getCurrentDay());
+    localStorage.setItem("daysSkipped", 0);
+    console.log("Start date reset to today:", date, ". Days skipped reset to 0.");
+    updateDay();
+}
+
+/*number of days since start date + 1*/
+function getDaysSinceStartIndex() {
+    return getCurrentDay() - getStartDate() + 1 + parseInt(localStorage.getItem("daysSkipped") || "0");
+}
+
+/*number of days since 2025*/
+function getCurrentDay() {
+    const now = new Date();
+    const date = Math.floor((now - new Date(2025)) / (1000 * 60 * 60 * 24));
+    return date;
+}
+
+function incrementDaysSkipped() {
+    localStorage.setItem("daysSkipped", parseInt(localStorage.getItem("daysSkipped") || "0") + 1);
+    console.log("Incremented days skipped. Current count:", localStorage.getItem("daysSkipped"));
+    updateDay();
 }
