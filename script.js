@@ -1,11 +1,11 @@
 // Your legendary list of obscure words
 const words = [
     "defenestrate",
-    /*"eat",
+    "salubrious",
     "ultracrepidarian",
     "snollygoster",
     "absquatulate",
-    "sesquipedalian",*/
+    "sesquipedalian",
 ];
 
 // Same logic: consistent word each day
@@ -22,8 +22,14 @@ const word = getWordOfTheDay();
 const now = new Date();
 const dayOfYear = Math.floor((now - new Date(now.getFullYear(), 0, 0)) / (1000 * 60 * 60 * 24));
 document.getElementById("word").textContent = `Day ${dayOfYear}: ${word}`;
-document.getElementById("definition").textContent = `Definition: ${showDefinition(word)}`;
-document.getElementById("example").textContent = `Example: ${showUsageExample(word)}`;
+getWordData(word).then(data => {
+    document.getElementById("definition").textContent = `Definition: ${data.definition}`;
+    document.getElementById("example").textContent = `Example: ${data.example}`;
+    document.getElementById("pronunciation").textContent = `Pronunciation: ${data.pronunciation}`;
+}).catch(err => {
+    console.error("Error fetching word data:", err);
+});
+
 
 // Register service worker for PWA
 if ('serviceWorker' in navigator) {
@@ -96,4 +102,26 @@ async function showUsageExample(word) {
         console.error("Error:", err.message);
         document.getElementById("example").innerText = "Example not found.";
     }
+}
+
+async function getWordData(word) {
+    const response = await fetch(`https://wordsapiv1.p.rapidapi.com/words/${word}`, {
+        method: "GET",
+        headers: {
+            "X-RapidAPI-Key": "0734dd73b8msh6fbed3f491620a5p18fdacjsn973e21be5855",
+            "X-RapidAPI-Host": "wordsapiv1.p.rapidapi.com"
+        }
+    });
+
+    if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const data = await response.json();
+
+    const definition = data.results?.[0]?.definition || "No definition found.";
+    const example = data.results?.[0]?.examples?.[0] || "No usage example found.";
+    const pronunciation = data.pronunciation?.all || "No pronunciation found.";
+
+    return { definition, example, pronunciation };
 }
