@@ -1,8 +1,8 @@
 // Your legendary list of obscure words
 const words = [
     "defenestrate",
-    "salubrious",
     "ultracrepidarian",
+    "salubrious",
     "snollygoster",
     "absquatulate",
     "sesquipedalian",
