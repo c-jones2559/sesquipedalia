@@ -27,7 +27,7 @@ document.getElementById("word").textContent = `Day ${dayOfYear}: ${word}`;
 getWordData(word).then(data => {
     document.getElementById("definition").textContent = `Definition: ${data.definition}`;
     document.getElementById("example").textContent = `Example: ${data.example}`;
-    document.getElementById("pronunciation").textContent = `Pronunciation: ${data.pronunciation}`;
+    document.getElementById("pronunciation").textContent = `${data.pronunciation}`;
 }).catch(err => {
     console.error("Error fetching word data:", err);
 });
@@ -41,6 +41,12 @@ if ('serviceWorker' in navigator) {
 }
 
 async function getWordData(word) {
+    const cached = localStorage.getItem(`word-${word.toLowerCase()}`);
+    if (cached) {
+        console.log(`Loaded "${word}" from cache`);
+        return JSON.parse(cached);
+    }
+
     const response = await fetch(`https://wordsapiv1.p.rapidapi.com/words/${word}`, {
         method: "GET",
         headers: {
@@ -55,9 +61,15 @@ async function getWordData(word) {
 
     const data = await response.json();
 
-    const definition = data.results?.[0]?.definition || "No definition found.";
-    const example = data.results?.[0]?.examples?.[0] || "No usage example found.";
-    const pronunciation = data.pronunciation?.all || "No pronunciation found.";
+    const wordData = {
+        definition: data.results?.[0]?.definition || "No definition found.",
+        example: data.results?.[0]?.examples?.[0] || "No usage example found.",
+        pronunciation: data.pronunciation?.all || "No pronunciation found."
+    };
 
-    return { definition, example, pronunciation };
+    // Save to cache
+    localStorage.setItem(`word-${word.toLowerCase()}`, JSON.stringify(wordData));
+
+    console.log(`Fetched "${word}" from API and cached`);
+    return wordData;
 }
