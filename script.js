@@ -1,11 +1,13 @@
 // Your legendary list of obscure words
 const words = [
     "defenestrate",
-    "ultracrepidarian",
+    "ostracise",
+    "sonder",
     "salubrious",
     "snollygoster",
     "absquatulate",
     "sesquipedalian",
+    "exacerbate",
 ];
 
 // Same logic: consistent word each day
