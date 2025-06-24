@@ -1,7 +1,9 @@
 /* Selects all <h1> elements and makes them blue */
 h1 {
-  color: darkblue;
-  text-align: center;
+    color: darkblue;
+    text-align: center;
+    font-size: 4rem;
+    padding-top: 0rem;
 }
 h2 {
     color: blue;
@@ -9,5 +11,7 @@ h2 {
 }
 
 body {
+    margin: 0;
+    padding-top: 0;
     text-align: center;
 }
