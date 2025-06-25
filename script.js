@@ -53,6 +53,7 @@ async function getWordData(word) {
         return JSON.parse(cached);
     }
 
+    countApiCall();
     const response = await fetch(`https://wordsapiv1.p.rapidapi.com/words/${word}`, {
         method: "GET",
         headers: {
@@ -69,7 +70,9 @@ async function getWordData(word) {
 
     const wordData = {
         definition: data.results?.[0]?.definition || "No definition found.",
-        example: data.results?.[0]?.examples?.[0] || "No usage example found.",
+        example: (
+            data.results?.map(r => r.examples?.[0]).find(e => e) || "No usage example found."
+        ),
         pronunciation: data.pronunciation?.all || "No pronunciation found."
     };
 
@@ -117,4 +120,21 @@ function incrementDaysSkipped() {
     localStorage.setItem("daysSkipped", parseInt(localStorage.getItem("daysSkipped") || "0") + 1);
     console.log("Incremented days skipped. Current count:", localStorage.getItem("daysSkipped"));
     updateDay();
+}
+
+
+
+function countApiCall() {
+    const today = new Date().toISOString().slice(0, 10); // YYYY-MM-DD
+    const usage = JSON.parse(localStorage.getItem("dailyUsage") || "{}");
+
+    if (usage.date !== today) {
+        usage.date = today;
+        usage.count = 0;
+    }
+
+    usage.count += 1;
+    localStorage.setItem("dailyUsage", JSON.stringify(usage));
+
+    console.log(`API calls today: ${usage.count}/2500`);
 }
