@@ -39,7 +39,7 @@ function updateDay() {
     document.getElementById("word").textContent = `Day ${getDaysSinceStartIndex()}: ${word}`;
     getWordData(word).then(data => {
         document.getElementById("definition").textContent = `Definition: ${data.definition}`;
-        document.getElementById("example").textContent = `Example: ${data.example}`;
+        document.getElementById("example").textContent = `${data.example}`;
         document.getElementById("pronunciation").textContent = `${data.pronunciation}`;
     }).catch(err => {
         console.error("Error fetching word data:", err);
@@ -79,9 +79,9 @@ async function getWordData(word) {
     const wordData = {
         definition: data.results?.[0]?.definition || "No definition found.",
         example: (
-            data.results?.map(r => r.examples?.[0]).find(e => e) || "No usage example found."
+            data.results?.map(r => r.examples?.[0]).find(e => e) || ""
         ),
-        pronunciation: data.pronunciation?.all || "No pronunciation found."
+        pronunciation: data.pronunciation?.all || ""
     };
 
     // Save to cache

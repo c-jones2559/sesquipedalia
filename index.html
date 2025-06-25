@@ -17,26 +17,29 @@
 <body>
     <h1>Sesquipedalia</h1>
     
-    
-    <div>
-        <h2>About</h2>
-        <h3>Welcome to Sesquipedalia!</h3>
-        <p style="text-align:justify">Sesquipedalia's goal is to expand your vocabulary by giving you new words to learn each week, and challenges you to use them <i>in the wild</i>.</p>
-    </div>
+    <div class="main-container">
+        <div class="coolbox">
+            <h2>About</h2>
+            <h3>Welcome to Sesquipedalia!</h3>
+            <p style="text-align:justify">Sesquipedalia's goal is to expand your vocabulary by giving you new words to learn each week, and challenges you to use them <i>in the wild</i>.</p>
+        </div>
 
-    <div>
-        <h2 id="word"></h2>
-        <p id="pronunciation", style="text-align: right", style="padding-top:0", style="margin-top:0">this word doesn't work :(</p>
-        <p id="definition">press increment below and it might fix</p>
-        <p id="example">who knows</p>
+        <div class="coolbox">
+            <h2 id="word">Loading...</h2>
+            <p id="pronunciation", style="text-align: right", style="padding-top:0", style="margin-top:0"></p>
+            <p id="definition"></p>
+            <p id="example", style="font-style:italic">who knows</p>
+
+        </div>
+
         
     </div>
 
-    <button id="reset" onclick="resetStartDate()">Reset</button>
-    <button id="increment" onclick="incrementDaysSkipped()">Increment</button>
-    <button id="filter" onclick="filterValidWords(getWordList())">Filter</button>
-
-    
+    <div class="button-bar">
+        <button id="reset" onclick="resetStartDate()">Reset</button>
+        <button id="increment" onclick="incrementDaysSkipped()">Increment</button>   
+        <button id="filter" onclick="filterValidWords(getWordList())">Filter</button>
+    </div>
     
     <script src="script.js"></script>
 
