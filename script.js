@@ -2,24 +2,22 @@ function getWordList() {
     const words = [
         'sesquipedalian', 'defenestrate', 'ostracise', 'ubiquitous',
         'serendipitous', 'absquatulate', 'cacophony', 'collywobbles',
-        'blatherskite', 'abecedarian', 'raconteur', 'lamprophony',
-        'autotomy', 'xanthic', 'logorrhea', 'callipygian',
-        'discombobulate', 'zugzwang', 'hemidemisemiquaver', 'bibliopole',
-        'velleity', 'flibbertigibbet', 'mellifluous', 'hobbledehoy',
-        'callithumpian', 'gubbins', 'pneumonoultramicroscopicsilicovolcanoconiosis', 'crapulous',
+        'blatherskite', 'abecedarian', 'raconteur', 'autotomy',
+        'logorrhea', 'callipygian', 'discombobulate', 'hemidemisemiquaver',
+        'bibliopole', 'velleity', 'flibbertigibbet', 'mellifluous',
+        'hobbledehoy', 'callithumpian', 'gubbins', 'crapulous',
         'cantankerous', 'farrago', 'skedaddle', 'taradiddle',
-        'verisimilitude', 'widdershins', 'zephyr', 'defalcate',
-        'ephemeral', 'fugacious', 'halcyon', 'insouciant',
-        'jejune', 'lachrymose', 'malapropism', 'nepenthe',
-        'obfuscate', 'parsimonious', 'quixotic', 'recalcitrant',
-        'tintinnabulation', 'uxorious', 'vendetta', 'weltanschauung',
-        'yammer', 'zaftig', 'anomie', 'brouhaha',
-        'debauchery', 'eidolon', 'fantods', 'gallimaufry',
-        'harangue', 'iconoclast', 'juggernaut', 'kerfuffle',
-        'legerdemain', 'noisome', 'obstreperous', 'palimpsest',
-        'quandary', 'rumbustious', 'skullduggery', 'tatterdemalion',
-        'ululate', 'vapid', 'wizened', 'yokel',
-        'apocryphal', 'bumbershoot', 'cynosure', 'emollient',
+        'verisimilitude', 'zephyr', 'defalcate', 'ephemeral',
+        'fugacious', 'halcyon', 'insouciant', 'jejune',
+        'lachrymose', 'malapropism', 'obfuscate', 'parsimonious',
+        'quixotic', 'recalcitrant', 'tintinnabulation', 'uxorious',
+        'vendetta', 'weltanschauung', 'yammer', 'zaftig',
+        'anomie', 'brouhaha', 'debauchery', 'fantods',
+        'gallimaufry', 'harangue', 'iconoclast', 'juggernaut',
+        'kerfuffle', 'legerdemain', 'noisome', 'obstreperous',
+        'palimpsest', 'quandary', 'rumbustious', 'skullduggery',
+        'tatterdemalion', 'ululate', 'vapid', 'wizened',
+        'yokel', 'apocryphal', 'cynosure', 'emollient',
         'flummox', 'gossamer', 'infelicitous', 'jocular',
         'kowtow', 'nugatory', 'persiflage', 'rambunctious',
         'machiavellian'
@@ -159,7 +157,10 @@ async function isInDictionary(word) {
         }
     });
 
-    return response.ok;
+    if (!response.ok) return false;
+
+    const data = await response.json();
+    return Array.isArray(data.results) && data.results.length > 0 && !!data.results[0].definition;
 }
 
 async function filterValidWords(wordList) {
