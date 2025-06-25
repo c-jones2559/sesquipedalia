@@ -41,6 +41,7 @@ function updateDay() {
         document.getElementById("definition").textContent = `Definition: ${data.definition}`;
         document.getElementById("example").textContent = `${data.example}`;
         document.getElementById("pronunciation").textContent = `${data.pronunciation}`;
+        document.getElementById("link").href = `https://www.merriam-webster.com/dictionary/${word}`;
     }).catch(err => {
         console.error("Error fetching word data:", err);
     });
