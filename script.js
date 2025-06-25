@@ -1,27 +1,37 @@
-const words = [
-  'sanctiloquent',  'defenestrate',    'limerence',
-  'kakorrhaphiophobia', 'collywobbles',  'quomodocunquize',
-  'psithurism',     'blatherskite',    'scacchic',
-  'apricity',       'susurrus',        'mumpsimus',
-  'gobbledygook',   'philoprogenitive','clinomania',
-  'fudgel',         'absquatulate',    'yonderly',
-  'serendipity',    'abecedarian',     'wabbit',
-  'raconteur',      'infandous',       'squizzy',
-  'zettzwang',      'lamprophony',     'pauciloquent',
-  'tyrotoxism',     'autotomy',        'epicaricacy',
-  'nefelibata',     'xanthic',         'collywobbles',
-  'limerence',      'logorrhea',       'nudiustertian',
-  'callipygian',    'tittynope',       'recumbentibus',
-  'discombobulate', 'jentacular',      'zugzwang',
-  'hemidemisemiquaver', 'agelast',      'absquatulate',
-  'bibliopole',     'petrichor',       'kakorrhaphiophobia',
-  'sonder',         'velleity',        'infandous'
-]
+function getWordList() {
+    const words = [
+        'sesquipedalian', 'defenestrate', 'ostracise', 'ubiquitous',
+        'serendipitous', 'absquatulate', 'cacophony', 'collywobbles',
+        'blatherskite', 'abecedarian', 'raconteur', 'lamprophony',
+        'autotomy', 'xanthic', 'logorrhea', 'callipygian',
+        'discombobulate', 'zugzwang', 'hemidemisemiquaver', 'bibliopole',
+        'velleity', 'flibbertigibbet', 'mellifluous', 'hobbledehoy',
+        'callithumpian', 'gubbins', 'pneumonoultramicroscopicsilicovolcanoconiosis', 'crapulous',
+        'cantankerous', 'farrago', 'skedaddle', 'taradiddle',
+        'verisimilitude', 'widdershins', 'zephyr', 'defalcate',
+        'ephemeral', 'fugacious', 'halcyon', 'insouciant',
+        'jejune', 'lachrymose', 'malapropism', 'nepenthe',
+        'obfuscate', 'parsimonious', 'quixotic', 'recalcitrant',
+        'tintinnabulation', 'uxorious', 'vendetta', 'weltanschauung',
+        'yammer', 'zaftig', 'anomie', 'brouhaha',
+        'debauchery', 'eidolon', 'fantods', 'gallimaufry',
+        'harangue', 'iconoclast', 'juggernaut', 'kerfuffle',
+        'legerdemain', 'noisome', 'obstreperous', 'palimpsest',
+        'quandary', 'rumbustious', 'skullduggery', 'tatterdemalion',
+        'ululate', 'vapid', 'wizened', 'yokel',
+        'apocryphal', 'bumbershoot', 'cynosure', 'emollient',
+        'flummox', 'gossamer', 'infelicitous', 'jocular',
+        'kowtow', 'nugatory', 'persiflage', 'rambunctious',
+        'machiavellian'
+    ];
+    return words;
+}
 
 function getWordOfTheDay() {
-    const index = getDaysSinceStartIndex() - 1 % words.length;
-    return words[index];
+    const index = getDaysSinceStartIndex() - 1 % getWordList().length;
+    return getWordList()[index];
 }
+
 
 
 updateDay();
@@ -137,4 +147,41 @@ function countApiCall() {
     localStorage.setItem("dailyUsage", JSON.stringify(usage));
 
     console.log(`API calls today: ${usage.count}/2500`);
+}
+
+async function isInDictionary(word) {
+    countApiCall();
+    const response = await fetch(`https://wordsapiv1.p.rapidapi.com/words/${word}`, {
+        method: "GET",
+        headers: {
+            "X-RapidAPI-Key": "0734dd73b8msh6fbed3f491620a5p18fdacjsn973e21be5855",
+            "X-RapidAPI-Host": "wordsapiv1.p.rapidapi.com"
+        }
+    });
+
+    return response.ok;
+}
+
+async function filterValidWords(wordList) {
+    const validWords = [];
+
+    for (const word of wordList) {
+        try {
+            const isValid = await isInDictionary(word);
+            if (isValid) {
+                console.log(`✅ ${word} is valid`);
+                validWords.push(word);
+            } else {
+                console.log(`❌ ${word} not found`);
+            }
+        } catch (err) {
+            console.error(`⚠️ Error checking ${word}:`, err.message);
+        }
+
+        // Avoid hammering the API too fast
+        await new Promise(r => setTimeout(r, 300));
+    }
+
+    console.log("Valid words:", validWords);
+    return validWords;
 }
